@@ -1,0 +1,36 @@
+version : '3'
+
+networks:
+driver :
+driver : bridge 
+
+service :
+hw11 :
+build : . 
+networks :
+ - app-tier
+
+ports: 
+ - "8010:8010"
+ 
+ depends_on :
+ -dbpgsql
+ volumes:
+ - ".:/hw11/src/app"
+
+dbpgsql:
+image: postgres:15
+ports:
+  - "5432:5432"
+
+  env_file:
+  - .env
+
+  environment:
+  - POSTGRES_USER
+  - POSTGRES_PASSWORD
+  - POSTGRES_DB
+
+  networks:
+  - app-tier
+
